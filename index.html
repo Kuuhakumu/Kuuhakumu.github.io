@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผลงานของฉัน</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <style>
+        body {
+            background-color: #1f1f1f;
+            color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .skill-card {
+            background: linear-gradient(145deg, #2a2a2a, #333);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(145deg, #333, #2a2a2a);
+        }
+
+        .skill-card i {
+            font-size: 3rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .skill-card p {
+            color: #e0e0e0;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .skill-card:hover i {
+            color: #ffcc00;
+            transform: scale(1.2);
+        }
+
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1f1f1f;
+            color: #00ff00;
+            font-size: 1.5rem;
+            font-family: 'Courier New', monospace;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            background: linear-gradient(145deg, #333, #2a2a2a);
+            color: #f0f0f0;
+            padding: 3rem 0;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer a {
+            color: #4caf50;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #ffcc00;
+            transform: translateY(-5px);
+        }
+
+        footer .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        footer a:hover .icon {
+            transform: rotate(360deg);
+            color: #ffcc00;
+        }
+
+        footer .social-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        footer.visible .social-container {
+            opacity: 1 }
+
+        .profile-picture {
+            border: 4px solid #4caf50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-picture:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+        }
+
+        .glow-text:hover {
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            padding: 1rem;
+            background-color: rgba(42, 42, 42, 0.9);
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: #4caf50;
+            text-decoration: none;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            color: #ffcc00;
+            transform: translateX(10px);
+        }
+
+        .sidebar .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar a:hover .icon {
+            transform: rotate(360deg);
+            color: #ffcc00;
+        }
+
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(270deg, #1f1f1f, #2a2a2a, #333);
+            background-size: 600% 600%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* RGB Animation for Text */
+        @keyframes rgbAnimation {
+            0% { color: rgb(255, 0, 0); }
+            25% { color: rgb(0, 255, 0); }
+            50% { color: rgb(0, 0, 255); }
+            75% { color: rgb(255, 255, 0); }
+            100% { color: rgb(255, 0, 255); }
+        }
+
+        .rgb-text {
+            animation: rgbAnimation 5s linear infinite;
+        }
+
+        /* Popup Styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(42, 42, 42, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            display: none; /* Hidden by default */
+            animation: popupAnimation 0.3s ease forwards;
+        }
+
+        @keyframes popupAnimation {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+
+        .close-button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* Hide sidebar on mobile */
+            }
+
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+
+            .skill-card i {
+                font-size: 2rem;
+            }
+
+            .skill-card p {
+                font-size: 0.9rem;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .grid-cols-2 {
+                grid-template-columns: repeat(1, 1fr); /* Change to 1 column on mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Particle.js Background -->
+    <div id="particles-js"></div>
+
+    <!-- Loader Screen -->
+    <div class="loader rgb-text">
+        <p id="console-text"></p>
+        <p class="message" id="loading-message">Initializing system...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content p-4 md:p-8">
+        <div class="container mx-auto">
+
+            <!-- Profile Section -->
+            <div class="flex flex-col items-center mb-8 fade-in" id="profile-section">
+                <img src="https://cdn.discordapp.com/attachments/1272076842819653704/1330582398538350736/logo.png?ex=679fa46c&is=679e52ec&hm=4f09d83d6406e1a474a0e514ea8114c052d4ea8d7cb0f501cc109fabfbe4a0c0&"
+                    alt="Profile Picture" class="w-32 h-32 md:w-48 md:h-48 rounded-full mb-4 profile-picture floating rgb-text">
+                <div class="text-center">
+                    <h1 class="text-2xl md:text-3xl font-bold rgb-text glow-text">ผลงานของฉัน</h1>
+                    <p class="text-sm md:text-base rgb-text">นักพัฒนาเว็บ | JavaScript Enthusiast</p>
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+<!-- Skills Section -->
+<div class="mb-8">
+    <h2 class="text-xl md:text-2xl font-bold mb-6 text-center rgb-text">🛠 ทักษะที่ถนัด</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="skill-card fade-in" id="skill-hand-drafting">
+            <i class="fas fa-pencil-alt rgb-text"></i>
+            <p class="rgb-text">Hand Drafting</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-autocad">
+            <i class="fas fa-drafting-compass rgb-text"></i>
+            <p class="rgb-text">AutoCAD</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-python">
+            <i class="fab fa-python rgb-text"></i>
+            <p class="rgb-text">Python</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-cpp">
+            <i class="fab fa-c rgb-text"></i>
+            <p class="rgb-text">C++</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-css">
+            <i class="fab fa-css3-alt rgb-text"></i>
+            <p class="rgb-text">CSS</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-html">
+            <i class="fab fa-html5 rgb-text"></i>
+            <p class="rgb-text">HTML</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-nodejs">
+            <i class="fab fa-node-js rgb-text"></i>
+            <p class="rgb-text">Node.js</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-lua">
+            <i class="fab fa-lua rgb-text"></i>
+            <p class="rgb-text">Lua</p>
+        </div>
+        <div class="skill-card fade-in" id="skill-arduino">
+            <i class="fab fa-arduino rgb-text"></i>
+            <p class="rgb-text">Arduino</p>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+        <!-- Toggle Button -->
+        <div class="toggle-button" id="toggleButton">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- Sidebar Section -->
+        <div class="sidebar hidden md:block" id="sidebar">
+            <a href="https://discord.com" target="_blank" class="social-link">
+                <div class="icon bg-gray-700 p-4 rounded-full shadow-lg">
+                    <i class="fab fa-discord rgb-text"></i>
+                </div>
+                <p class="text-lg rgb-text">Discord</p>
+            </a>
+            <a href="https://github.com/Kuuhakumu" target="_blank" class="social-link">
+                <div class="icon bg-gray-700 p-4 rounded-full shadow-lg">
+                    <i class="fab fa-github rgb-text"></i>
+                </div>
+                <p class="text-lg rgb-text">GitHub</p>
+            </a>
+            <a href="#" class="social-link" id="emailButton">
+                <div class="icon bg-gray-700 p-4 rounded-full shadow-lg">
+                    <i class="fas fa-envelope rgb-text"></i>
+                </div>
+                <p class="text-lg rgb-text">Email</p>
+            </a>
+        </div>
+
+        <!-- Popup Overlay -->
+        <div class="popup-overlay" id="popupOverlay"></div>
+
+        <!-- Email Popup Window -->
+        <div class="popup" id="emailPopup">
+            <button class="close-button" id="closeEmailPopup">&times;</button>
+            <h2 class="text-lg font-bold">Contact Me</h2>
+            <p>Email: <a href="mailto:kuuhakumu@svk.jp" class="text-blue-400">kuuhakumu@svk.jp</a></p>
+        </div>
+
+        <!-- Discord Popup Window -->
+        <div class="popup" id="discordPopup">
+            <button class="close-button" id="closeDiscordPopup">&times;</button>
+            <h2 class="text-lg font-bold">My Discord</h2>
+            <p>Discord ID: <span class="text-blue-400">kuuhakumu</span></p>
+        </div>
+
+        <style>
+            /* Styles for the toggle button */
+            .toggle-button {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                background-color: rgba(42, 42, 42, 0.9);
+                color: white;
+                padding: 10px;
+                border-radius: 50%;
+                cursor: pointer;
+                z-index: 1001;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .toggle-button:hover {
+                background-color: rgba(52, 52, 52, 0.9);
+            }
+
+            /* Styles for Sidebar */
+            .sidebar {
+                position: fixed;
+                top: 35%;
+                transform: translateY(-50%);
+                left: 0;
+                padding: 1rem;
+                background-color: rgba(42, 42, 42, 0.9);
+                border-radius: 0 15px 15px 0;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                cursor: grab;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .sidebar:active {
+                cursor: grabbing;
+            }
+
+            /* Styles when Sidebar is collapsed */
+            .sidebar.collapsed {
+                transform: translateX(-100%) translateY(-50%);
+            }
+        </style>
+
+        <script>
+            // JavaScript for collapsing Sidebar
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('toggleButton');
+
+            // Function to toggle Sidebar
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+            });
+
+            // JavaScript for dragging Sidebar
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            // Start dragging
+            sidebar.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - sidebar.getBoundingClientRect().left;
+                offsetY = e.clientY - sidebar.getBoundingClientRect().top;
+                sidebar.style.cursor = 'grabbing'; // Change cursor while dragging
+            });
+
+            // Move Sidebar
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const x = e.clientX - offsetX;
+                    const y = e.clientY - offsetY // Limit position to prevent going off-screen
+                    const maxX = window.innerWidth - sidebar.offsetWidth;
+                    const maxY = window.innerHeight - sidebar.offsetHeight;
+
+                    sidebar.style.left = `${Math.min(Math.max(x, 0), maxX)}px`;
+                    sidebar.style.top = `${Math.min(Math.max(y, 0), maxY)}px`;
+                }
+            });
+
+            // Stop dragging
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    sidebar.style.cursor = 'grab'; // Reset cursor
+                }
+            });
+
+            // JavaScript for Email Popup
+            const emailButton = document.getElementById('emailButton');
+            const emailPopup = document.getElementById('emailPopup');
+            const popupOverlay = document.getElementById('popupOverlay');
+            const closeEmailPopup = document.getElementById('closeEmailPopup');
+
+            emailButton.addEventListener('click', () => {
+                emailPopup.style.display = 'block';
+                popupOverlay.style.display = 'block';
+            });
+
+            closeEmailPopup.addEventListener('click', () => {
+                emailPopup.style.display = 'none';
+                popupOverlay.style.display = 'none';
+            });
+
+            popupOverlay.addEventListener('click', () => {
+                emailPopup.style.display = 'none';
+                popupOverlay.style.display = 'none';
+            });
+
+            // JavaScript for Discord Popup
+            const discordButton = document.querySelector('.social-link:nth-child(1)');
+            const discordPopup = document.getElementById('discordPopup');
+            const closeDiscordPopup = document.getElementById('closeDiscordPopup');
+
+            discordButton.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default link behavior
+                discordPopup.style.display = 'block';
+                popupOverlay.style.display = 'block';
+            });
+
+            closeDiscordPopup.addEventListener('click', () => {
+                discordPopup.style.display = 'none';
+                popupOverlay.style.display = 'none';
+            });
+        </script>
+
+    </div>
+
+    <script>
+        const messages = [
+            "Initializing system...",
+            "Loading assets...",
+            "Connecting to database...",
+            "Fetching user data...",
+            "Optimizing performance...",
+            "System check complete!",
+            "Launching interface..."
+        ];
+
+        const consoleText = document.getElementById("console-text");
+        const loadingMessage = document.getElementById("loading-message");
+        let index = 0;
+
+        function typeMessage(message, callback) {
+            let i = 0;
+            consoleText.innerHTML = "";
+            const interval = setInterval(() => {
+                consoleText.innerHTML += message[i];
+                i++;
+                if (i === message.length) {
+                    clearInterval(interval);
+                    setTimeout(callback, 800);
+                }
+            }, 10);
+        }
+
+        function showNextMessage() {
+            if (index < messages.length) {
+                typeMessage(messages[index], () => {
+                    index++;
+                    showNextMessage();
+                });
+            } else {
+                setTimeout(() => {
+                    document.querySelector('.loader').style.display = 'none';
+                    document.querySelector('.content').style.display = 'block';
+                    setTimeout(() => {
+                        document.querySelector('.content').style.opacity = '1';
+                    }, 100);
+                    const fadeElements = document.querySelectorAll('.fade-in');
+                    fadeElements.forEach((el) => {
+                        el.classList.add('visible');
+                    });
+                }, 1000);
+            }
+        }
+
+        showNextMessage();
+    </script>
+
+</body>
+
+</html>
